@@ -53,7 +53,7 @@ Nous utilisons une approche d'**Ensemble Learning** via un `VotingRegressor`.
 
 ```text
 /
-├── app.py                  # Point d'entrée principal (Code Streamlit)
+├── appProtoFinal.py        # Point d'entrée principal (Code Streamlit)
 ├── modele_immo_v13.joblib  # Modèle entraîné (persistance binaire)
 ├── requirements.txt        # Liste des dépendances Python
 ├── README.md               # Guide de démarrage rapide

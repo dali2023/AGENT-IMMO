@@ -40,7 +40,12 @@ pip install -r requirements.txt
 
 3. **Lancer l'application :**
 ```bash
-streamlit run app.py
+streamlit run appProtoFinal.py
+```
+
+4. **Lancer les tests :**
+```bash
+python -m pytest tests -q
 ```
 
 ---
