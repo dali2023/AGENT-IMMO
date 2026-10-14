@@ -165,7 +165,18 @@ def train_hybrid_model(df, progress_bar, rf_trees, xgb_n_est, xgb_lr, xgb_depth,
         return None
 
     # Nettoyage des valeurs nulles
+    nb_avant = len(df_proc)
     df_proc = df_proc.dropna(subset=req_cols)
+
+    # Il faut assez de lignes pour le split Train/Test et la Cross-Validation
+    nb_min = max(20, cv_folds * 5)
+    if len(df_proc) < nb_min:
+        cols_vides = [c for c in req_cols if df[c].isna().all()]
+        detail = f" Colonnes entièrement vides : {cols_vides}." if cols_vides else ""
+        st.error(f"Pas assez de données exploitables : {len(df_proc)} ligne(s) sur {nb_avant} après suppression "
+                 f"des valeurs manquantes et des outliers (minimum requis : {nb_min}).{detail} "
+                 f"Vérifiez le séparateur et le contenu de votre CSV.")
+        return None
 
     # Calcul de l'âge du bien (plus pertinent que l'année de construction brute)
     current_year = datetime.datetime.now().year

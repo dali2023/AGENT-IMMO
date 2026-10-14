@@ -108,6 +108,12 @@ def test_entrainement_colonnes_manquantes(app, dataset):
     assert app.train_hybrid_model(dataset.drop(columns=["rooms"]), Bar(), [20], [50], [0.1], [3], 2) is None
 
 
+@pytest.mark.parametrize("cas", ["colonne_vide", "trop_peu_de_lignes"])
+def test_entrainement_donnees_insuffisantes(app, dataset, cas):
+    df = dataset.assign(garage=np.nan) if cas == "colonne_vide" else dataset.head(3)
+    assert app.train_hybrid_model(df, Bar(), [20], [50], [0.1], [3], 2) is None
+
+
 def test_prediction_positive(trained):
     X = trained["raw_df"].drop(columns=["price", "constructed_year"]).head(5)
     prix = np.expm1(trained["model"].predict(X))
