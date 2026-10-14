@@ -2,7 +2,6 @@
 
 import importlib.util
 import io
-import os
 from pathlib import Path
 
 import joblib
@@ -106,6 +105,17 @@ def test_entrainement_produit_un_modele_valide(trained):
 
 def test_entrainement_colonnes_manquantes(app, dataset):
     assert app.train_hybrid_model(dataset.drop(columns=["rooms"]), Bar(), [20], [50], [0.1], [3], 2) is None
+
+
+def test_entrainement_accepte_yes_no_et_virgule_decimale(app, dataset):
+    df = dataset.copy()
+    df["garage"] = df["garage"].map({1: "Yes", 0: "No"})
+    df["garden"] = df["garden"].map({1: "Oui", 0: "non"})
+    df["connectivity_score"] = df["connectivity_score"].astype(str) + ",5"
+    res = app.train_hybrid_model(df, Bar(), [20], [50], [0.1], [3], 2)
+    assert res is not None
+    assert set(res["raw_df"]["garage"]) <= {0, 1}
+    assert res["raw_df"]["connectivity_score"].iloc[0] % 1 == 0.5
 
 
 @pytest.mark.parametrize("cas", ["colonne_vide", "trop_peu_de_lignes"])

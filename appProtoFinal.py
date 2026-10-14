@@ -164,14 +164,23 @@ def train_hybrid_model(df, progress_bar, rf_trees, xgb_n_est, xgb_lr, xgb_depth,
         st.error(f"Colonnes manquantes dans le fichier CSV : {missing}")
         return None
 
+    # Conversion des colonnes numériques : 'Yes'/'No' (ou 'Oui'/'Non', 'True'/'False') -> 1/0,
+    # virgule décimale -> point, et toute autre valeur non numérique devient NaN.
+    oui_non = {'yes': 1, 'no': 0, 'oui': 1, 'non': 0, 'true': 1, 'false': 0, 'y': 1, 'n': 0}
+    num_req = [c for c in req_cols if c not in ('country', 'city', 'property_type')]
+    for c in num_req:
+        if not pd.api.types.is_numeric_dtype(df_proc[c]):
+            txt = df_proc[c].astype(str).str.strip().str.lower()
+            df_proc[c] = pd.to_numeric(txt.map(oui_non).fillna(txt.str.replace(',', '.')), errors='coerce')
+
     # Nettoyage des valeurs nulles
     nb_avant = len(df_proc)
+    cols_vides = [c for c in req_cols if df_proc[c].isna().all()]
     df_proc = df_proc.dropna(subset=req_cols)
 
     # Il faut assez de lignes pour le split Train/Test et la Cross-Validation
     nb_min = max(20, cv_folds * 5)
     if len(df_proc) < nb_min:
-        cols_vides = [c for c in req_cols if df[c].isna().all()]
         detail = f" Colonnes entièrement vides : {cols_vides}." if cols_vides else ""
         st.error(f"Pas assez de données exploitables : {len(df_proc)} ligne(s) sur {nb_avant} après suppression "
                  f"des valeurs manquantes et des outliers (minimum requis : {nb_min}).{detail} "
