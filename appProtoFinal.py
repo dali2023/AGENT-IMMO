@@ -126,7 +126,7 @@ def filtrer_outliers(df):
     MÉTHODE :
     On garde uniquement les prix compris entre le 1er centile (1%) et le 99ème centile (99%).
     """
-    if 'price' not in df.columns: return df, 0
+    if 'price' not in df.columns: return df, 0, None, None
     q_low = df['price'].quantile(0.01)
     q_high = df['price'].quantile(0.99)
     df_filtered = df[(df['price'] > q_low) & (df['price'] < q_high)]
@@ -164,8 +164,28 @@ def train_hybrid_model(df, progress_bar, rf_trees, xgb_n_est, xgb_lr, xgb_depth,
         st.error(f"Colonnes manquantes dans le fichier CSV : {missing}")
         return None
 
+    # Conversion des colonnes numériques : 'Yes'/'No' (ou 'Oui'/'Non', 'True'/'False') -> 1/0,
+    # virgule décimale -> point, et toute autre valeur non numérique devient NaN.
+    oui_non = {'yes': 1, 'no': 0, 'oui': 1, 'non': 0, 'true': 1, 'false': 0, 'y': 1, 'n': 0}
+    num_req = [c for c in req_cols if c not in ('country', 'city', 'property_type')]
+    for c in num_req:
+        if not pd.api.types.is_numeric_dtype(df_proc[c]):
+            txt = df_proc[c].astype(str).str.strip().str.lower()
+            df_proc[c] = pd.to_numeric(txt.map(oui_non).fillna(txt.str.replace(',', '.')), errors='coerce')
+
     # Nettoyage des valeurs nulles
+    nb_avant = len(df_proc)
+    cols_vides = [c for c in req_cols if df_proc[c].isna().all()]
     df_proc = df_proc.dropna(subset=req_cols)
+
+    # Il faut assez de lignes pour le split Train/Test et la Cross-Validation
+    nb_min = max(20, cv_folds * 5)
+    if len(df_proc) < nb_min:
+        detail = f" Colonnes entièrement vides : {cols_vides}." if cols_vides else ""
+        st.error(f"Pas assez de données exploitables : {len(df_proc)} ligne(s) sur {nb_avant} après suppression "
+                 f"des valeurs manquantes et des outliers (minimum requis : {nb_min}).{detail} "
+                 f"Vérifiez le séparateur et le contenu de votre CSV.")
+        return None
 
     # Calcul de l'âge du bien (plus pertinent que l'année de construction brute)
     current_year = datetime.datetime.now().year
@@ -305,7 +325,7 @@ with tab1:
             sqft = surface_m2 * 10.7639  # Conversion : 1 m² = 10.7639 sqft
             st.caption(f"≈ {sqft:.0f} sqft (unité utilisée par l'IA)")
 
-            annee = st.number_input("Année Construction", min_value=1800, max_value=2025, value=2010, step=1)
+            annee = st.number_input("Année Construction", min_value=1800, max_value=datetime.datetime.now().year, value=2010, step=1)
 
         with col_B:
             chambres = st.number_input("Nombre de pièces", min_value=0, max_value=50, value=3, step=1)
@@ -322,7 +342,7 @@ with tab1:
 
         # Préparation des données pour la prédiction
         input_data = pd.DataFrame([{
-            'property_size_sqft': sqft, 'property_age': 2025 - annee, 'rooms': chambres,
+            'property_size_sqft': sqft, 'property_age': datetime.datetime.now().year - annee, 'rooms': chambres,
             'bathrooms': sdb, 'neighbourhood_rating': quartier, 'connectivity_score': conn,
             'garage': garage, 'garden': garden, 'country': pays, 'city': ville, 'property_type': p_type
         }])
@@ -364,7 +384,7 @@ with tab1:
             fig.add_annotation(x=prix_estime, y=0, text="Votre Bien", showarrow=True, arrowhead=1, ax=0, ay=-40,
                                bgcolor="#e74c3c", font=dict(color="white"))
             fig.update_layout(xaxis_title="Prix (€)", yaxis_title="Nombre de biens", showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
 # --- ONGLET 2 : ENTRAÎNEMENT ---
 with tab2:

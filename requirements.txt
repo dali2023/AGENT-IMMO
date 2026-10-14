@@ -14,6 +14,9 @@ joblib
 jupyterlab
 ipykernel
 streamlit
+plotly
+python-dotenv
+pytest
 black
 isort
 flake8
