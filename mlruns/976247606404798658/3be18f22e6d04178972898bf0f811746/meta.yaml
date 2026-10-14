@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/3be18f22e6d04178972898bf0f811746/artifacts
+end_time: 1761057821156
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: 3be18f22e6d04178972898bf0f811746
+run_name: efficient-mole-410
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761057820773
+status: 3
+tags: []
+user_id: neildev

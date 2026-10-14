@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/d914910b14de486895645236d95c563b/artifacts
+end_time: 1761059290759
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: d914910b14de486895645236d95c563b
+run_name: skittish-horse-858
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761059290754
+status: 4
+tags: []
+user_id: neildev

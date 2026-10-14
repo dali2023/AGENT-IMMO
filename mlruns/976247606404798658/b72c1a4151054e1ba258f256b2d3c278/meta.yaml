@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/b72c1a4151054e1ba258f256b2d3c278/artifacts
+end_time: 1761059977906
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: b72c1a4151054e1ba258f256b2d3c278
+run_name: rambunctious-bug-116
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761059977902
+status: 4
+tags: []
+user_id: neildev

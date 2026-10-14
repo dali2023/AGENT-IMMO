@@ -1,0 +1,29 @@
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Modèle IA
+*.joblib
+models/*.joblib
+*.pkl
+
+# Base de donnée
+*.csv
+
+# Environnement virtuel (si vous en avez un)
+venv/
+.venv/
+env/
+
+# IDE settings (PyCharm, VSCode)
+.idea/
+.vscode/
+*.swp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Notre dossier Archive (optionnel, si vous ne voulez pas l'envoyer)
+archive/

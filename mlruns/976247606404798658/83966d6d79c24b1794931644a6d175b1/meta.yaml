@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/83966d6d79c24b1794931644a6d175b1/artifacts
+end_time: 1761057153184
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: 83966d6d79c24b1794931644a6d175b1
+run_name: spiffy-snipe-326
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761057152842
+status: 4
+tags: []
+user_id: neildev

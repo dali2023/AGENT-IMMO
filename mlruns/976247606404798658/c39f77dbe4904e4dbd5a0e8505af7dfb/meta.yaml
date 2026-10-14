@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/c39f77dbe4904e4dbd5a0e8505af7dfb/artifacts
+end_time: 1761059988630
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: c39f77dbe4904e4dbd5a0e8505af7dfb
+run_name: polite-donkey-204
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761059988625
+status: 4
+tags: []
+user_id: neildev

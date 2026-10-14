@@ -1,0 +1,14 @@
+artifact_uri: /home/neildev/dev/ia-immobilier/mlruns/976247606404798658/d5a942f89c8d489d9cdb8cbcd6558326/artifacts
+end_time: 1761057501705
+entry_point_name: ''
+experiment_id: '976247606404798658'
+lifecycle_stage: active
+run_id: d5a942f89c8d489d9cdb8cbcd6558326
+run_name: monumental-fawn-939
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761057501340
+status: 4
+tags: []
+user_id: neildev
